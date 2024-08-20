@@ -27,7 +27,7 @@ export default function Navbar() {
             </Link>
 
             {/* Search Form (desktop only) */}
-            <form className='hidden lg:flex'>
+            <form className='hidden lg:flex md:inline'>
                 <div className="relative flex items-center">
                     <input type="text" className="border p-2 pr-10 rounded-lg dark:bg-gray-800 dark:text-white" placeholder="Search" />
                     <Search className="absolute right-2 text-gray-800 dark:text-white w-5 h-5" />
@@ -35,7 +35,7 @@ export default function Navbar() {
             </form>
 
             {/* Mobile Search Button */}
-            <button className='lg:hidden w-8 h-8 border border-gray-200 flex items-center justify-center rounded-full'>
+            <button className='lg:hidden md:hidden w-8 h-8 border border-gray-200 flex items-center justify-center rounded-full'>
                 <Search className="text-gray-800 dark:text-white w-4 h-4" />
             </button>
 
