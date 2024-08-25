@@ -1,18 +1,21 @@
 import User from "../model/userModel.js";
 import bcryptjs from "bcryptjs";
+import { errorHandler } from "../utils/error.js";
 
-export const signUp = async (req, res) => {
+export const signUp = async (req, res, next) => {
     const { userName, email, password } = req.body;
 
     if (!userName || !email || !password || userName === '' || email === '' || password === '') {
-        return res.status(400).json({ message: 'All fields are required' });
+        next(errorHandler(400, 'All fileds are required'))
 
     }
     const hashPassword = bcryptjs.hashSync(password, 10);
     try {
         const existingUser = await User.findOne({ $or: [{ userName: userName }, { email: email }] });
         if (existingUser) {
-            return res.status(400).json({ message: 'User already exists' });
+            const error = new Error('User already exists');
+            error.statusCode = 400;
+            throw error;
         }
         const newUser = new User({
             userName,
@@ -23,7 +26,7 @@ export const signUp = async (req, res) => {
         const user = await newUser.save();
         res.status(201).json({ message: 'User created successfully', user });
     } catch (error) {
-        res.status(500).json({ message: 'Internal server error' });
+        next(error);
 
     }
 
