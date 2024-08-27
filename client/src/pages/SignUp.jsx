@@ -1,6 +1,62 @@
-import { Link } from 'react-router-dom';
+import { Square, CheckSquare } from 'lucide-react';
+import { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import Snackbar from '../components/ui/SnackBar'
 
 export default function SignUp() {
+  const [showPassword, setShowPassword] = useState(false);
+  const [formData, setFormData] = useState({});
+  const [snackbar, setSnackbar] = useState({ open: false, message: '', type: '' });
+
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.id]: e.target.value.trim() });
+    // console.log(e.target.value);
+  }
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!formData.userName || !formData.email || !formData.password) {
+      setSnackbar({ show: true, message: 'Please fill out all the fields.', type: 'error' });
+      return;
+    }
+    try {
+      setLoading(true);
+      const response = await fetch('/api/auth/signup', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+
+        body: JSON.stringify(formData),
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(`HTTP error! status: ${response.status}, message: ${errorText}`);
+      }
+      const data = await response.json();
+      console.log(data);
+      setLoading(false);
+      navigate('/sign-in');
+      setSnackbar({ show: true, message: 'Sign up successful!', type: 'success' });
+    } catch (error) {
+      console.error('Error:', error);
+      setLoading(false);
+      setSnackbar({ show: true, message: 'Sign up failed. Please try again.', type: 'error' });
+    }
+  };
+
+  const handleCloseSnackbar = () => {
+    setSnackbar({ ...snackbar, show: false });
+  };
+
   return (
     <div className="min-h-screen mt-20">
       <div className="flex p-3 max-w-3xl mx-auto flex-col md:flex-row md:items-center gap-10">
@@ -14,48 +70,75 @@ export default function SignUp() {
           </Link>
           <p className="text-sm mt-5 leading-relaxed text-gray-700 dark:text-gray-300">
             Welcome to Guriya&apos;s Blog! Discover a collection of insightful articles, tutorials,
-            and stories on a variety of topics. 
+            and stories on a variety of topics.
           </p>
         </div>
         {/* right side */}
-        <div className="flex-1">
-          <form className="flex flex-col gap-4 ">
-            <div className=''>
-              <label htmlFor="userName" className="text-sm font-semibold capitalize ">Username</label>
+        <div className="flex-1 md:w-1/2 mt-10 md:mt-0">
+          <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
+            <div>
+              <label htmlFor="userName" className="text-base font-semibold capitalize">Username</label>
               <input
                 type="text"
                 id="userName"
-                placeholder="Enter your username "
+                value={formData.userName || ''}
+                placeholder="Enter your username"
                 className="ring-1 ring-zinc-200 w-full mt-1 p-2 rounded-md focus:ring-2 focus:ring-indigo-500 focus:outline-none"
                 required
+                onChange={handleChange}
               />
             </div>
             <div>
-              <label htmlFor="email" className="text-sm font-semibold capitalize">Email</label>
+              <label htmlFor="email" className="text-base font-semibold capitalize">Email</label>
               <input
                 type="email"
                 id="email"
                 placeholder="Enter your email"
+                value={formData.email || ''}
                 className="ring-1 ring-zinc-200 w-full mt-1 p-2 rounded-md focus:ring-2 focus:ring-indigo-500 focus:outline-none"
                 required
+                onChange={handleChange}
               />
             </div>
-            <div>
-              <label htmlFor="password" className="text-sm font-semibold capitalize">Password</label>
+            {/* Password */}
+            <div className="relative">
+              <label htmlFor="password" className="text-base font-semibold capitalize">Password</label>
               <input
-                type="password"
+                type={showPassword ? "text" : "password"}
                 id="password"
                 placeholder="Enter your password"
+                value={formData.password || ''}
                 className="ring-1 ring-zinc-200 w-full mt-1 p-2 rounded-md focus:ring-2 focus:ring-indigo-500 focus:outline-none"
                 required
+                onChange={handleChange}
               />
+              <div className="flex items-center gap-2 mt-1">
+                <button
+                  type="button"
+                  onClick={togglePasswordVisibility}
+                  className="flex items-center text-xs leading-none"
+                >
+                  {showPassword ? <CheckSquare className='w-4 h-4' /> : <Square className='w-4 h-4' />}
+                </button>
+                <span className='text-sm'>Show Password</span>
+              </div>
             </div>
             <div>
               <button
                 type="submit"
                 className="w-full bg-indigo-500 text-white py-2 rounded-md hover:bg-indigo-600 transition duration-300"
+                disabled={loading}
               >
-                Sign Up
+                {
+                  loading ? (
+                    <div className="flex items-center justify-center">
+                      <span className="animate-spin rounded-full h-4 w-4 border-b-2 border-white">
+
+                      </span>
+                      <span className="ml-2">Signing Up...</span>
+                    </div>
+                  ) : 'Sign Up'
+                }
               </button>
             </div>
           </form>
@@ -67,6 +150,12 @@ export default function SignUp() {
           </div>
         </div>
       </div>
+      <Snackbar
+        message={snackbar.message}
+        type={snackbar.type}
+        show={snackbar.show}
+        onClose={handleCloseSnackbar}
+      />
     </div>
   );
 }
