@@ -5,6 +5,7 @@ import SignUp from "./pages/SignUp"
 import Dashboard from "./pages/Dashboard"
 import Projects from "./pages/projects"
 import Navbar from "./components/Navbar"
+import Footer from "./components/Footer"
 
 
 function App() {
@@ -21,6 +22,7 @@ function App() {
           <Route path="/projects" element={<Projects />} />
           <Route path="/dashboard" element={<Dashboard />} />
         </Routes>
+        <Footer/>
       </BrowserRouter>
 
     </>
