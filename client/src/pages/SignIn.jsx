@@ -2,14 +2,17 @@ import { Square, CheckSquare } from 'lucide-react';
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Snackbar from '../components/ui/SnackBar'
+import { useDispatch, useSelector } from 'react-redux';
+import { signInStart, signInSuccess, signInFailure } from '../redux/user/userSlice';
 
 export default function SignIn() {
     const [showPassword, setShowPassword] = useState(false);
     const [formData, setFormData] = useState({});
     const [snackbar, setSnackbar] = useState({ open: false, message: '', type: '' });
+    const { loading } = useSelector((state) => state.user);;
 
-    const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     const togglePasswordVisibility = () => {
         setShowPassword(!showPassword);
@@ -27,7 +30,8 @@ export default function SignIn() {
             return;
         }
         try {
-            setLoading(true);
+          
+            dispatch(signInStart());
             const response = await fetch('/api/auth/signin', {
                 method: 'POST',
                 headers: {
@@ -43,12 +47,12 @@ export default function SignIn() {
             }
             const data = await response.json();
             console.log(data);
-            setLoading(false);
+            dispatch(signInSuccess(data));
             navigate('/');
             setSnackbar({ show: true, message: 'Sign in successful!', type: 'success' });
         } catch (error) {
             console.error('Error:', error);
-            setLoading(false);
+            dispatch(signInFailure(error.message));
             setSnackbar({ show: true, message: 'Sign up failed. Please try again.', type: 'error' });
         }
     };
@@ -114,7 +118,7 @@ export default function SignIn() {
                             <button
                                 type="submit"
                                 className="w-full bg-indigo-500 text-white py-2 rounded-md hover:bg-indigo-600 transition duration-300"
-                                disabled={loading}
+                                disabled={formData.email && formData.password ? false : true}
                             >
                                 {
                                     loading ? (
