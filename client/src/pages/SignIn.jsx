@@ -4,7 +4,9 @@ import { Link, useNavigate } from 'react-router-dom';
 import Snackbar from '../components/ui/SnackBar'
 import { useDispatch, useSelector } from 'react-redux';
 import { signInStart, signInSuccess, signInFailure } from '../redux/user/userSlice';
+import OAuth from "../components/OAuth";
 
+ 
 export default function SignIn() {
     const [showPassword, setShowPassword] = useState(false);
     const [formData, setFormData] = useState({});
@@ -107,7 +109,7 @@ export default function SignIn() {
                                 <button
                                     type="button"
                                     onClick={togglePasswordVisibility}
-                                    className="flex items-center text-xs leading-none"
+                                    className="flex items-center text-xs leading-none "
                                 >
                                     {showPassword ? <CheckSquare className='w-4 h-4' /> : <Square className='w-4 h-4' />}
                                 </button>
@@ -117,7 +119,7 @@ export default function SignIn() {
                         <div>
                             <button
                                 type="submit"
-                                className="w-full bg-indigo-500 text-white py-2 rounded-md hover:bg-indigo-600 transition duration-300"
+                                className="w-full bg-gradient-to-r from-indigo-500 to-blue-500 text-white py-2 rounded-md hover:bg-indigo-600 transition duration-300"
                                 disabled={formData.email && formData.password ? false : true}
                             >
                                 {
@@ -132,6 +134,7 @@ export default function SignIn() {
                                 }
                             </button>
                         </div>
+                        <OAuth />
                     </form>
                     <div className="flex gap-2 text-sm mt-5">
                         <span>Don&apos;t have an account?</span>
