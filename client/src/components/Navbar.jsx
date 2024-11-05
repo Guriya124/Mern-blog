@@ -1,17 +1,19 @@
 // Nabvar component 
 
 import { Link, useLocation } from 'react-router-dom';
-import { Moon, Search, Menu, X } from "lucide-react";
+import { Moon,Sun, Search, Menu, X } from "lucide-react";
 import { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import ProfileDropdown from './ui/ProfileDropdown';
 import avatar from '../assets/avatar.png'
+import { toggleTheme } from '../redux/theme/themeSlice';
 
 export default function Navbar() {
     const location = useLocation();
+    const dispatch = useDispatch();
     const path = location.pathname;
     const { CurrentUser } = useSelector(state => state.user); // Adjusted to match the state structure
-
+    const { theme } = useSelector(state => state.theme);
     const currentUser = CurrentUser;
     const menu = [
         { title: "Home", link: "/" },
@@ -33,6 +35,10 @@ export default function Navbar() {
         console.log('currentUser:', currentUser);
         console.log('currentUser profilePic:', currentUser?.profilePic);
     }, [currentUser]);
+
+
+ 
+
     return (
         <nav className="p-3 flex items-center justify-between border-b bg-white dark:bg-gray-900 ">
             {/* Logo and Title */}
@@ -71,8 +77,15 @@ export default function Navbar() {
 
             {/* Right Side Buttons (always visible) */}
             <div className='flex items-center gap-5'>
-                <button className='w-10 h-10 border border-gray-200 hidden md:flex items-center justify-center rounded-full'>
-                    <Moon className="w-5 h-5 dark:text-white" />
+                {/* dark  mode functionality  */}
+                <button
+                    onClick={() => dispatch(toggleTheme())}
+                    className='w-10 h-10 border border-gray-200 hidden md:flex items-center justify-center rounded-full'>
+                    {theme === 'dark' ? (
+                        <Sun className="w-5 h-5 text-yellow-500" />
+                    ) : (
+                        <Moon className="w-5 h-5 dark:text-white" />
+                    )}
                 </button>
 
                 {/*profile  dropdown menu */}
@@ -92,9 +105,8 @@ export default function Navbar() {
                         </button>
                         {isDropdownOpen && (
                             <ProfileDropdown user={{
-
                                 userName: currentUser.userName,
-                                email: currentUser.email
+                                email: currentUser.email,
                             }} onClose={() => setIsDropdownOpen(false)} />
                         )}
 
@@ -111,13 +123,8 @@ export default function Navbar() {
                 )
 
                 }
-                {/* {console.log(currentUser)} */}
-                {console.log('ProfileDropdown user:', {
-                    profilePic: currentUser?.profilePic,
-                    userName: currentUser?.userName,
-                    email: currentUser?.email
-                })
-                }
+
+
                 {/* Mobile Menu Toggle Button */}
                 <button className='lg:hidden border md:px-2 px-1 py-1 rounded-lg flex items-center justify-center' onClick={toggleMenu}>
                     {isOpen ? <X className="w-6 h-6 text-gray-900 font-bold dark:text-white" /> : <Menu className="w-6 h-6 text-gray-900 font-bold dark:text-white" />}
