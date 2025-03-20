@@ -45,7 +45,7 @@ export default function SignUp() {
       const data = await response.json();
       console.log(data);
       setLoading(false);
-      navigate('/sign-in');
+      navigate('/signin');
       setSnackbar({ show: true, message: 'Sign up successful!', type: 'success' });
     } catch (error) {
       console.error('Error:', error);
@@ -59,7 +59,7 @@ export default function SignUp() {
   };
 
   return (
-    <div className="min-h-[70svh] mt-20">
+    <div className="min-h-[72svh] mt-20">
       <div className="flex p-3 max-w-3xl mx-auto flex-col md:flex-row md:items-center gap-10">
         {/* left side */}
         <div className="flex-1 text-center md:text-left">
@@ -67,15 +67,16 @@ export default function SignUp() {
             <span className="px-2 py-1 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-lg text-white">
               Guriya&rsquo;s
             </span>
-            <span>Blog</span>
+            {/* <span>Blog</span> */}
           </Link>
           <p className="text-sm mt-5 leading-relaxed text-gray-700 dark:text-gray-300">
-            Welcome to Guriya&apos;s Blog! Discover a collection of insightful articles, tutorials,
-            and stories on a variety of topics.
+            Welcome to Guriya&apos;s Blog! Discover a collection of insightful articles, tutorials, 
+             and stories on a variety of topics.
+            
           </p>
         </div>
         {/* right side */}
-        <div className="flex-1 md:w-1/2 mt-10 md:mt-0">
+        <div className="flex-1 md:w-1/2 mt-10 md:mt-0 h-full">
           <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
             <div>
               <label htmlFor="userName" className="text-base font-semibold capitalize">Username</label>
@@ -84,7 +85,7 @@ export default function SignUp() {
                 id="userName"
                 value={formData.userName || ''}
                 placeholder="Enter your username"
-                className="ring-1 ring-zinc-200 w-full mt-1 p-2 rounded-md focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+                className="ring-1 ring-zinc-200 w-full mt-1 p-2 rounded-md focus:ring-2 focus:ring-indigo-500 focus:outline-none text-black"
                 required
                 onChange={handleChange}
               />
@@ -109,7 +110,7 @@ export default function SignUp() {
                 id="password"
                 placeholder="Enter your password"
                 value={formData.password || ''}
-                className="ring-1 ring-zinc-200 w-full mt-1 p-2 rounded-md focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+                className="ring-1 ring-zinc-200 w-full mt-1 p-2 rounded-md focus:ring-2 focus:ring-indigo-500 focus:outline-none text-black"
                 required
                 onChange={handleChange}
               />
@@ -146,7 +147,7 @@ export default function SignUp() {
           </form>
           <div className="flex gap-2 text-sm mt-5">
             <span>Already have an account?</span>
-            <Link to="/sign-in">
+            <Link to="/signin">
               <span className="text-indigo-500">Sign In</span>
             </Link>
           </div>

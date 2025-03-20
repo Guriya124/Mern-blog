@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { signInStart, signInSuccess, signInFailure } from '../redux/user/userSlice';
 import OAuth from "../components/OAuth";
 
- 
+
 export default function SignIn() {
     const [showPassword, setShowPassword] = useState(false);
     const [formData, setFormData] = useState({});
@@ -32,7 +32,7 @@ export default function SignIn() {
             return;
         }
         try {
-          
+
             dispatch(signInStart());
             const response = await fetch('/api/auth/signin', {
                 method: 'POST',
@@ -64,22 +64,23 @@ export default function SignIn() {
     };
 
     return (
-        <div className="min-h-[70svh] mt-20">
-            <div className="flex p-3 max-w-3xl mx-auto flex-col md:flex-row md:items-center gap-10">
+        <div className="min-h-[72svh] mt-20 ">
+            <div className="flex p-3 max-w-3xl mx-auto flex-col md:flex-row md:items-center gap-10 mt-20">
                 {/* left side */}
                 <div className="flex-1 text-center md:text-left">
                     <Link to="/" className="flex items-center justify-center md:justify-start space-x-2 text-4xl font-bold dark:text-white">
                         <span className="px-2 py-1 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-lg text-white">
                             Guriya&rsquo;s
                         </span>
-                        <span>Blog</span>
+                        {/* <span>Blog</span> */}
                     </Link>
                     <p className="text-sm mt-5 leading-relaxed text-gray-700 dark:text-gray-300">
                         Welcome back to Guriya&apos;s Blog! Sign in to access your personalized dashboard, save your favorite articles, and join the conversation with our community.
+
                     </p>
                 </div>
                 {/* right side */}
-                <div className="flex-1 md:w-1/2 mt-10 md:mt-0">
+                <div className="flex-1 md:w-1/2 mt-10 md:mt-0 h-full">
                     <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
                         <div>
                             <label htmlFor="email" className="text-base font-semibold capitalize">Email</label>
@@ -138,7 +139,7 @@ export default function SignIn() {
                     </form>
                     <div className="flex gap-2 text-sm mt-5">
                         <span>Don&apos;t have an account?</span>
-                        <Link to="/sign-up">
+                        <Link to="/signup">
                             <span className="text-indigo-500">Sign up</span>
                         </Link>
                     </div>

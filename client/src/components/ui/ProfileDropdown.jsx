@@ -4,13 +4,13 @@ import { useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { User, LogOut } from 'lucide-react';
-// import avatar from '../../assets/avatar.png';
+
 
 
 
 const ProfileDropdown = ({ user, onClose }) => {
     const dropdownRef = useRef(null);
-
+    console.log(user);
     useEffect(() => {
         const handleClickOutside = (event) => {
             if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -30,7 +30,7 @@ const ProfileDropdown = ({ user, onClose }) => {
                 <div className='flex gap-2 items-center'>
 
 
-                    <div className='block text-sm truncate text-center'>@{user.userName}</div>
+                    <div className='block text-sm truncate text-center '>@<span className='font-bold capitalize'> {user.userName}</span></div>
                 </div>
                 <div className="block text-sm truncate">{user.email}</div>
             </div>

@@ -8,8 +8,8 @@ export default function ThemeProvider({ children }) {
 
     
     return (
-        <div className={`min-h-screen ${theme === 'dark' ? 'dark' : ''}`}>
-            <div className="bg-white text-gray-700 dark:text-gray-100 dark:bg-[rgb(16,23,42)]">
+        <div className={` ${theme === 'dark' ? 'dark' : ''}`}>
+            <div className="bg-white text-gray-700 dark:text-gray-100 dark:bg-[rgb(16,23,42)] h-full">
                 {children}
             </div>
 

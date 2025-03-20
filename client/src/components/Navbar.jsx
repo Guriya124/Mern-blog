@@ -1,8 +1,8 @@
 // Nabvar component 
 
 import { Link, useLocation } from 'react-router-dom';
-import { Moon,Sun, Search, Menu, X } from "lucide-react";
-import { useState, useEffect } from 'react';
+import { Moon, Sun, Search, Menu, X } from "lucide-react";
+import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import ProfileDropdown from './ui/ProfileDropdown';
 import avatar from '../assets/avatar.png'
@@ -12,9 +12,9 @@ export default function Navbar() {
     const location = useLocation();
     const dispatch = useDispatch();
     const path = location.pathname;
-    const { CurrentUser } = useSelector(state => state.user); // Adjusted to match the state structure
+    const CurrentUser = useSelector(state => state.user.CurrentUser.user); // Adjusted to match the state structure
     const { theme } = useSelector(state => state.theme);
-    const currentUser = CurrentUser;
+    console.log(CurrentUser.userName);
     const menu = [
         { title: "Home", link: "/" },
         { title: "Projects", link: "/projects" }
@@ -31,22 +31,19 @@ export default function Navbar() {
         setIsDropdownOpen(!isDropdownOpen);
     };
 
-    useEffect(() => {
-        console.log('currentUser:', currentUser);
-        console.log('currentUser profilePic:', currentUser?.profilePic);
-    }, [currentUser]);
 
 
- 
+
+
 
     return (
-        <nav className="p-3 flex items-center justify-between border-b bg-white dark:bg-gray-900 ">
+        <nav className="p-3  flex items-center justify-between border-b bg-white dark:bg-gray-900 ">
             {/* Logo and Title */}
             <Link to="/" className="self-center whitespace-nowrap flex items-center space-x-2 text-sm sm:text-xl font-semibold dark:text-white">
                 <span className='px-2 py-1 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-lg text-white'>
                     Guriya&rsquo;s
                 </span>
-                <span>Blog</span>
+                {/* <span>Blog</span> */}
             </Link>
 
             {/* Search Form (desktop only) */}
@@ -82,18 +79,18 @@ export default function Navbar() {
                     onClick={() => dispatch(toggleTheme())}
                     className='w-10 h-10 border border-gray-200 hidden md:flex items-center justify-center rounded-full'>
                     {theme === 'dark' ? (
-                        <Sun className="w-5 h-5 text-yellow-500" />
+                        <Sun className="w-5 h-5 text-white" />
                     ) : (
                         <Moon className="w-5 h-5 dark:text-white" />
                     )}
                 </button>
 
                 {/*profile  dropdown menu */}
-                {currentUser ? (
+                {CurrentUser ? (
                     <div className="relative">
                         <button onClick={toggleDropdown} className="flex items-center">
                             <img
-                                src={currentUser.profilePic || avatar}
+                                src={CurrentUser.profilePic || avatar}
                                 alt="user"
                                 className="w-8 h-8 rounded-full object-cover"
                                 onError={(e) => {
@@ -103,11 +100,9 @@ export default function Navbar() {
                                 loading="lazy"
                             />
                         </button>
-                        {isDropdownOpen && (
-                            <ProfileDropdown user={{
-                                userName: currentUser.userName,
-                                email: currentUser.email,
-                            }} onClose={() => setIsDropdownOpen(false)} />
+                        {isDropdownOpen &&  (
+                            <ProfileDropdown user={CurrentUser} onClose={() => setIsDropdownOpen(false)} />
+                   
                         )}
 
 
@@ -115,7 +110,7 @@ export default function Navbar() {
 
 
                 ) : (
-                    <Link to="/sign-in">
+                    <Link to="/signin">
                         <button className='text-white text-sm md:text-base font-semibold md:py-2 py-1 md:px-4 px-2 rounded-xl bg-gradient-to-r from-purple-400 to-blue-500'>
                             Sign In
                         </button>

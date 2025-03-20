@@ -6,6 +6,7 @@ import Dashboard from "./pages/Dashboard"
 import Projects from "./pages/projects"
 import Navbar from "./components/Navbar"
 import Footer from "./components/Footer"
+import PrivateRoute from "./components/PrivateRoute"
 
 
 function App() {
@@ -17,12 +18,15 @@ function App() {
         <Navbar />
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/sign-in" element={<SignIn />} />
-          <Route path="/sign-up" element={<SignUp />} />
+          <Route path="/signin" element={<SignIn />} />
+          <Route path="/signup" element={<SignUp />} />
+          <Route element={<PrivateRoute />}>
+            <Route path="/dashboard" element={<Dashboard />} />
+          </Route>
           <Route path="/projects" element={<Projects />} />
-          <Route path="/dashboard" element={<Dashboard />} />
         </Routes>
-        <Footer/>
+        <Footer />
+
       </BrowserRouter>
 
     </>

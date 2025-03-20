@@ -1,25 +1,40 @@
 import express from 'express';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
+import cors from 'cors';
+
 import authRoutes from './router/authRoute.js';
 
 dotenv.config();
 
 const app = express();
 
-mongoose.connect(process.env.MONGODBURL, {
-    serverSelectionTimeoutMS: 30000,
-})
-    .then(() => {
-        console.log('Successfull Connected to MongoDB !!!');
-    })
-    .catch((err) => {
-        console.log('Failed to connect to MongoDB !!', err);
-    });
+// Connect to MongoDB
+const connectToDatabase = async () => {
+    try {
+        await mongoose.connect(process.env.MONGODBURL, {
+            serverSelectionTimeoutMS: 30000, // Timeout after 30s
+        });
+        console.log('Successfully connected to MongoDB!');
+    } catch (err) {
+        console.log('Failed to connect to MongoDB!', err);
+        process.exit(1); // Exit the process if MongoDB connection fails
+    }
+};
+
+// Call the function to connect to DB
+connectToDatabase();
+
+
 
 app.use(express.json());
+app.use(cors());
+
+
+
 
 app.use('/api/auth', authRoutes);
+
 
 // Error handling middleware
 app.use((err, req, res, next) => {
@@ -31,6 +46,8 @@ app.use((err, req, res, next) => {
         message
     });
 });
+
+
 
 app.listen(3000, () => {
     console.log('Server is running on http://localhost:3000 !!');

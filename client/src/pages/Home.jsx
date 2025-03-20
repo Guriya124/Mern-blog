@@ -3,7 +3,7 @@
 export default function Home() {
   return (
     <div>
-bcvbnbm,n./?v
+      Home Page
     </div>
   )
 }
